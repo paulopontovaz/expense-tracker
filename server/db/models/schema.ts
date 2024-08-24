@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, real, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+    integer,
+    pgTable,
+    real,
+    timestamp,
+    uuid,
+    varchar,
+} from "drizzle-orm/pg-core";
 
 export const participants = pgTable("participants", {
     id: uuid("id").primaryKey(),
@@ -18,7 +25,7 @@ export type ParticipantUpdate = Omit<
     ""
 >;
 
-export const recurrentExpenses = pgTable("participants", {
+export const recurrentExpenses = pgTable("recurrent_expenses", {
     id: uuid("id").primaryKey(),
     description: varchar("description", { length: 100 }).notNull(),
     price: real("price").notNull(),
@@ -44,3 +51,34 @@ export type RecurrentExpenseUpdate = Omit<
     Partial<RecurrentExpense> & Pick<RecurrentExpense, "id">,
     ""
 >;
+
+export const expensePeriodSummaries = pgTable("expense_period_summaries", {
+    id: uuid("id").primaryKey(),
+    description: varchar("description", { length: 100 }).notNull(),
+    startTime: timestamp("start_time").notNull(),
+    endTime: timestamp("end_time").notNull(),
+});
+
+export const expensePeriodSummarySettings = pgTable(
+    "expense_period_summary_settings",
+    {
+        id: uuid("id").primaryKey(),
+        // TODO: add relation "participants" in a new object
+        currency: varchar("currency", {
+            length: 3,
+            enum: ["USD", "EUR"],
+        }).notNull(),
+        expensePeriodSummaryId: uuid("expense_period_summary_id")
+            .notNull()
+            .references(() => expensePeriodSummaries.id),
+    },
+);
+
+export const expenseEntry = pgTable("expense_entry", {
+    id: uuid("id").primaryKey(),
+    description: varchar("description", { length: 100 }).notNull(),
+    price: real("price").notNull(),
+    expensePeriodSummaryId: uuid("expense_period_summary_id")
+        .notNull()
+        .references(() => expensePeriodSummaries.id),
+});
