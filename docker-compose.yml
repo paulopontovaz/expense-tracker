@@ -16,15 +16,6 @@ services:
         networks:
             - back-tier
 
-    redis:
-        image: redis:alpine
-        ports:
-            - 6379:6379
-        volumes:
-            - ./server/redis:/data
-        networks:
-            - back-tier
-
     server:
         build:
             context: server/
@@ -39,7 +30,6 @@ services:
             - DB_NAME=${DB_NAME}
             - DB_HOST=${DB_HOST}
             - DB_PORT=${DB_PORT}
-            - REDIS_HOST=${REDIS_HOST}
             - API_PORT=${API_PORT}
             - DRIZZLE_SSL=${DRIZZLE_SSL}
         networks:
@@ -79,7 +69,6 @@ services:
         depends_on:
             - client
             - server
-            - redis
 
 networks:
     front-tier:

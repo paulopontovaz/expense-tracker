@@ -10,7 +10,7 @@ setup_local() {
     cd ..
     docker compose stop
     docker compose rm -f
-    docker compose up postgres redis -d
+    docker compose up postgres -d
     cd server
     bun generate
     bun migrate

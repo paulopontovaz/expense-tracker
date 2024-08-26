@@ -5,7 +5,7 @@ export default defineConfig({
     schema: "./db/models/index.ts",
     out: "./db/migrations",
     dbCredentials: {
-        database: "idempotency_poc",
+        database: "expense_tracker",
         host: "localhost",
         password: "postgres",
         port: 5432,
