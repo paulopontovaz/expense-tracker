@@ -6,23 +6,25 @@ import type {
     ParticipantUpdate,
 } from "../../db/models/schema";
 
-export const getAllPaymentsService = async () =>
+export const getAllParticipantsService = async () =>
     await db.query.participants.findMany({
         orderBy: asc(participants.id),
     });
 
-export const getPaymentService = async (id: string) =>
+export const getParticipantService = async (id: string) =>
     await db.query.participants.findFirst({
         where: eq(participants.id, id),
     });
 
-export const insertPaymentService = async (newParticipant: ParticipantInsert) =>
+export const insertParticipantService = async (
+    newParticipant: ParticipantInsert,
+) =>
     await db
         .insert(participants)
         .values(newParticipant)
         .returning({ id: participants.id });
 
-export const updatePaymentService = async (
+export const updateParticipantService = async (
     updatedParticipant: ParticipantUpdate,
 ) =>
     await db
@@ -35,7 +37,7 @@ export const updatePaymentService = async (
             income: participants.income,
         });
 
-export const deletePaymentService = async (id: string) =>
+export const deleteParticipantService = async (id: string) =>
     await db
         .delete(participants)
         .where(eq(participants.id, id))
