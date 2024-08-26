@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+    boolean,
     integer,
     pgTable,
     real,
@@ -14,16 +15,18 @@ export const participants = pgTable("participants", {
     income: real("income").notNull(),
 });
 
-export const participantRelations = relations(participants, ({ many }) => ({
-    recurrentExpenses: many(recurrentExpenses),
-}));
+type EntityUpdate<E extends { id: string }> = Omit<
+    Partial<E> & Pick<E, "id">,
+    ""
+>;
 
 export type Participant = typeof participants.$inferSelect;
 export type ParticipantInsert = typeof participants.$inferInsert;
-export type ParticipantUpdate = Omit<
-    Partial<Participant> & Pick<Participant, "id">,
-    ""
->;
+export type ParticipantUpdate = EntityUpdate<Participant>;
+
+export const participantRelations = relations(participants, ({ many }) => ({
+    recurrentExpenses: many(recurrentExpenses),
+}));
 
 export const recurrentExpenses = pgTable("recurrent_expenses", {
     id: uuid("id").primaryKey(),
@@ -35,6 +38,10 @@ export const recurrentExpenses = pgTable("recurrent_expenses", {
         .references(() => participants.id),
 });
 
+export type RecurrentExpense = typeof recurrentExpenses.$inferSelect;
+export type RecurrentExpenseInsert = typeof recurrentExpenses.$inferInsert;
+export type RecurrentExpenseUpdate = EntityUpdate<RecurrentExpense>;
+
 export const recurrentExpensesRelations = relations(
     recurrentExpenses,
     ({ one }) => ({
@@ -45,13 +52,6 @@ export const recurrentExpensesRelations = relations(
     }),
 );
 
-export type RecurrentExpense = typeof recurrentExpenses.$inferSelect;
-export type RecurrentExpenseInsert = typeof recurrentExpenses.$inferInsert;
-export type RecurrentExpenseUpdate = Omit<
-    Partial<RecurrentExpense> & Pick<RecurrentExpense, "id">,
-    ""
->;
-
 export const expensePeriodSummaries = pgTable("expense_period_summaries", {
     id: uuid("id").primaryKey(),
     description: varchar("description", { length: 100 }).notNull(),
@@ -59,26 +59,35 @@ export const expensePeriodSummaries = pgTable("expense_period_summaries", {
     endTime: timestamp("end_time").notNull(),
 });
 
-export const expensePeriodSummarySettings = pgTable(
-    "expense_period_summary_settings",
-    {
-        id: uuid("id").primaryKey(),
-        // TODO: add relation "participants" in a new object
-        currency: varchar("currency", {
-            length: 3,
-            enum: ["USD", "EUR"],
-        }).notNull(),
-        expensePeriodSummaryId: uuid("expense_period_summary_id")
-            .notNull()
-            .references(() => expensePeriodSummaries.id),
-    },
+export type ExpensePeriodSummary = typeof expensePeriodSummaries.$inferSelect;
+export type ExpensePeriodSummaryInsert =
+    typeof expensePeriodSummaries.$inferInsert;
+export type ExpensePeriodSummaryUpdate = EntityUpdate<ExpensePeriodSummary>;
+
+export const expensePeriodSummariesRelations = relations(
+    expensePeriodSummaries,
+    ({ many }) => ({
+        expenseEntries: many(expenseEntries),
+    }),
 );
 
-export const expenseEntry = pgTable("expense_entry", {
+export const expenseEntries = pgTable("expense_entries", {
     id: uuid("id").primaryKey(),
     description: varchar("description", { length: 100 }).notNull(),
     price: real("price").notNull(),
+    paid: boolean("paid").notNull().default(false),
     expensePeriodSummaryId: uuid("expense_period_summary_id")
         .notNull()
         .references(() => expensePeriodSummaries.id),
 });
+
+export type ExpenseEntry = typeof expenseEntries.$inferSelect;
+export type ExpenseEntryInsert = typeof expenseEntries.$inferInsert;
+export type ExpenseEntryUpdate = EntityUpdate<ExpenseEntry>;
+
+export const expenseEntriesRelations = relations(expenseEntries, ({ one }) => ({
+    author: one(expensePeriodSummaries, {
+        fields: [expenseEntries.expensePeriodSummaryId],
+        references: [expensePeriodSummaries.id],
+    }),
+}));

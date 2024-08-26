@@ -1,1 +1,6 @@
-export { participants, recurrentExpenses } from "./schema";
+export {
+    expenseEntries,
+    expensePeriodSummaries,
+    participants,
+    recurrentExpenses,
+} from "./schema";
