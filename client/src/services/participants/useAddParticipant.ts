@@ -3,16 +3,16 @@ import type {
     Participant,
     ParticipantInsert,
 } from "../../../../server/db/models/schema";
-import { API_URL, api } from "./_common";
+import { api } from "../_common";
 import { getParticipantsQueryKey } from "./useGetAllParticipants";
 
-type AddParticipantResponse = { payment: Participant };
+type AddParticipantResponse = { participant: Participant };
 
 export const addParticipantRequest = async (
     participant: ParticipantInsert,
 ): Promise<AddParticipantResponse> =>
     (await api
-        .post(API_URL, { json: participant })
+        .post("/participants", { json: participant })
         .json()) as AddParticipantResponse;
 
 export const useAddParticipant = () => {

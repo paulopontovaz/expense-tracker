@@ -5,6 +5,4 @@ const BASE_API_URL =
         ? "http://localhost:9000/api"
         : import.meta.env.VITE_API_BASE_URL;
 
-export const API_URL = `${BASE_API_URL}/payments`;
-
-export const api = ky.extend({ retry: 0 });
+export const api = ky.extend({ retry: 0, prefixUrl: BASE_API_URL });

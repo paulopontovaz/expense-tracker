@@ -3,7 +3,7 @@ import type {
     Participant,
     ParticipantUpdate,
 } from "../../../../server/db/models/schema";
-import { API_URL, api } from "./_common";
+import { api } from "../_common";
 import { getParticipantsQueryKey } from "./useGetAllParticipants";
 
 type EditParticipantResponse = {
@@ -14,7 +14,7 @@ export const editParticipantRequest = async (
     participant: ParticipantUpdate,
 ): Promise<EditParticipantResponse> =>
     (await api
-        .patch(`${API_URL}/${participant.id}`, {
+        .patch(`/participants/${participant.id}`, {
             json: participant,
         })
         .json()) as EditParticipantResponse;

@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { API_URL, api } from "./_common";
+import { api } from "../_common";
 import { getParticipantsQueryKey } from "./useGetAllParticipants";
 
 export const deleteParticipantRequest = async (
     participantId: number,
 ): Promise<number> =>
-    (await api.delete(`${API_URL}/${participantId}`).json()) as number;
+    (await api.delete(`/participants/${participantId}`).json()) as number;
 
 export const useDeleteParticipant = () => {
     const queryClient = useQueryClient();
