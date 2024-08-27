@@ -9,16 +9,16 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-export const participants = pgTable("participants", {
-    id: uuid("id").primaryKey(),
-    name: varchar("name", { length: 100 }).notNull(),
-    income: real("income").notNull(),
-});
-
 type EntityUpdate<E extends { id: string }> = Omit<
     Partial<E> & Pick<E, "id">,
     ""
 >;
+
+export const participants = pgTable("participants", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name", { length: 100 }).notNull(),
+    income: real("income").notNull(),
+});
 
 export type Participant = typeof participants.$inferSelect;
 export type ParticipantInsert = typeof participants.$inferInsert;
@@ -29,7 +29,7 @@ export const participantRelations = relations(participants, ({ many }) => ({
 }));
 
 export const recurrentExpenses = pgTable("recurrent_expenses", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey(),
     description: varchar("description", { length: 100 }).notNull(),
     price: real("price").notNull(),
     frequency: integer("frequency").notNull().default(1),
@@ -53,7 +53,7 @@ export const recurrentExpensesRelations = relations(
 );
 
 export const expensePeriodSummaries = pgTable("expense_period_summaries", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey(),
     description: varchar("description", { length: 100 }).notNull(),
     startTime: timestamp("start_time").notNull(),
     endTime: timestamp("end_time").notNull(),
@@ -72,7 +72,7 @@ export const expensePeriodSummariesRelations = relations(
 );
 
 export const expenseEntries = pgTable("expense_entries", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey(),
     description: varchar("description", { length: 100 }).notNull(),
     price: real("price").notNull(),
     paid: boolean("paid").notNull().default(false),
