@@ -14,7 +14,7 @@ export const editParticipantRequest = async (
     participant: ParticipantUpdate,
 ): Promise<EditParticipantResponse> =>
     (await api
-        .patch(`/participants/${participant.id}`, {
+        .patch(`participants/${participant.id}`, {
             json: participant,
         })
         .json()) as EditParticipantResponse;

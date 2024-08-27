@@ -8,7 +8,7 @@ type FetchParticipantsResponse = {
 
 export const fetchAllParticipantsRequest = async () => {
     const response = (await api
-        .get("/participants")
+        .get("participants")
         .json()) as FetchParticipantsResponse;
 
     return response.participants ?? [];

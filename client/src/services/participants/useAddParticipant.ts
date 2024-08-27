@@ -12,7 +12,7 @@ export const addParticipantRequest = async (
     participant: ParticipantInsert,
 ): Promise<AddParticipantResponse> =>
     (await api
-        .post("/participants", { json: participant })
+        .post("participants", { json: participant })
         .json()) as AddParticipantResponse;
 
 export const useAddParticipant = () => {

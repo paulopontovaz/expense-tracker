@@ -3,9 +3,9 @@ import { api } from "../_common";
 import { getParticipantsQueryKey } from "./useGetAllParticipants";
 
 export const deleteParticipantRequest = async (
-    participantId: number,
+    participantId: string,
 ): Promise<number> =>
-    (await api.delete(`/participants/${participantId}`).json()) as number;
+    (await api.delete(`participants/${participantId}`).json()) as number;
 
 export const useDeleteParticipant = () => {
     const queryClient = useQueryClient();
