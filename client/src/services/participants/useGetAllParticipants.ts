@@ -2,23 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import type { Participant } from "../../../../server/db/models/schema";
 import { api } from "../_common";
 
-type FetchParticipantsResponse = {
+type FetchAllParticipantsResponse = {
     participants: Participant[];
 };
 
 export const fetchAllParticipantsRequest = async () => {
     const response = (await api
         .get("participants")
-        .json()) as FetchParticipantsResponse;
+        .json()) as FetchAllParticipantsResponse;
 
     return response.participants ?? [];
 };
 
-export const getParticipantsQueryKey = () => ["participants"];
+export const getAllParticipantsQueryKey = () => ["participants"];
 
 export const useGetAllParticipants = () => {
     const { data } = useQuery({
-        queryKey: getParticipantsQueryKey(),
+        queryKey: getAllParticipantsQueryKey(),
         queryFn: fetchAllParticipantsRequest,
         retry: 0,
     });

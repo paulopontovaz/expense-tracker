@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../_common";
-import { getParticipantsQueryKey } from "./useGetAllParticipants";
+import { getAllParticipantsQueryKey } from "./useGetAllParticipants";
 
 export const deleteParticipantRequest = async (
     participantId: string,
@@ -13,7 +13,7 @@ export const useDeleteParticipant = () => {
         mutationFn: deleteParticipantRequest,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: getParticipantsQueryKey(),
+                queryKey: getAllParticipantsQueryKey(),
                 refetchType: "active",
             });
         },

@@ -4,7 +4,7 @@ import type {
     ParticipantUpdate,
 } from "../../../../server/db/models/schema";
 import { api } from "../_common";
-import { getParticipantsQueryKey } from "./useGetAllParticipants";
+import { getAllParticipantsQueryKey } from "./useGetAllParticipants";
 
 type EditParticipantResponse = {
     participant: Participant;
@@ -25,7 +25,7 @@ export const useEditParticipant = () => {
         mutationFn: editParticipantRequest,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: getParticipantsQueryKey(),
+                queryKey: getAllParticipantsQueryKey(),
                 refetchType: "active",
             });
         },
