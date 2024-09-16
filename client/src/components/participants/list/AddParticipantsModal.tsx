@@ -12,9 +12,11 @@ import {
     ModalOverlay,
     VStack,
 } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
-import { useAddParticipant } from "../../../services";
+import type { Participant } from "../../../../../server/db/models/schema";
+import { useAddParticipant, useEditParticipant } from "../../../services";
 
 const schema = yup.object({
     name: yup.string().required("Name is required"),
@@ -25,30 +27,55 @@ type AddParticipantFormData = yup.InferType<typeof schema>;
 type AddParticipantsModalProps = {
     isOpen: boolean;
     onClose: () => void;
+    participant: Participant | null;
 };
 
 export function AddParticipantsModal(props: AddParticipantsModalProps) {
-    const { isOpen, onClose } = props;
+    const { isOpen, onClose, participant } = props;
     const {
         register,
         handleSubmit: handleFormSubmit,
         reset,
-    } = useForm<AddParticipantFormData>();
+    } = useForm<AddParticipantFormData>({
+        resolver: yupResolver(schema),
+        values: participant
+            ? {
+                  name: participant.name,
+                  income: participant.income,
+              }
+            : undefined,
+    });
     const { addParticipant } = useAddParticipant();
+    const { editParticipant } = useEditParticipant();
 
-    const handleSubmit: SubmitHandler<AddParticipantFormData> = async (
-        data,
-    ) => {
-        await addParticipant(data);
+    const handleOnClose = () => {
         reset();
         onClose();
     };
 
+    const handleSubmit: SubmitHandler<AddParticipantFormData> = async (
+        data,
+    ) => {
+        if (participant) {
+            await editParticipant({ ...data, id: participant.id });
+        } else {
+            await addParticipant(data);
+        }
+        handleOnClose();
+    };
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal
+            isOpen={isOpen}
+            onClose={handleOnClose}
+            closeOnOverlayClick={false}
+            closeOnEsc={false}
+        >
             <ModalOverlay />
             <ModalContent as="form" onSubmit={handleFormSubmit(handleSubmit)}>
-                <ModalHeader>Add Participant</ModalHeader>
+                <ModalHeader>
+                    {`${participant ? "Edit" : "Add"}`} Participant
+                </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <VStack spacing={3}>
@@ -67,11 +94,11 @@ export function AddParticipantsModal(props: AddParticipantsModalProps) {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button variant="ghost" mr={3} onClick={onClose}>
+                    <Button variant="ghost" mr={3} onClick={handleOnClose}>
                         Cancel
                     </Button>
                     <Button type="submit" colorScheme="blue">
-                        Add
+                        Save
                     </Button>
                 </ModalFooter>
             </ModalContent>
