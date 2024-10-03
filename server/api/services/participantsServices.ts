@@ -11,10 +11,24 @@ export const getAllParticipantsService = async () =>
         orderBy: asc(participants.id),
     });
 
-export const getParticipantService = async (id: string) =>
-    await db.query.participants.findFirst({
-        where: eq(participants.id, id),
-    });
+export const getParticipantService = async (id: string) => {
+    try {
+        const participant = await db.query.participants.findFirst({
+            where: eq(participants.id, id),
+            with: {
+                recurrentExpenses: true,
+            },
+        });
+
+        return participant;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw error;
+        }
+
+        throw new Error(`An unknown error occurred: ${error}`);
+    }
+};
 
 export const insertParticipantService = async (
     newParticipant: ParticipantInsert,
