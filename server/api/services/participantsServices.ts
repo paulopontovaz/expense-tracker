@@ -6,10 +6,33 @@ import type {
     ParticipantUpdate,
 } from "../../db/models/schema";
 
-export const getAllParticipantsService = async () =>
-    await db.query.participants.findMany({
-        orderBy: asc(participants.id),
-    });
+export type GetAllParticipantsServiceReturnType = Awaited<
+    ReturnType<typeof getAllParticipantsService>
+>;
+
+export const getAllParticipantsService = async () => {
+    try {
+        const participantList = await db.query.participants.findMany({
+            orderBy: asc(participants.id),
+            with: {
+                recurrentExpenses: {
+                    orderBy: ({ frequency, price }, { asc }) => [
+                        asc(frequency),
+                        asc(price),
+                    ],
+                },
+            },
+        });
+
+        return participantList;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw error;
+        }
+
+        throw new Error(`An unknown error occurred: ${error}`);
+    }
+};
 
 export const getParticipantService = async (id: string) => {
     try {

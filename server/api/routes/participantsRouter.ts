@@ -11,9 +11,13 @@ const participantsRouter = new Hono();
 
 participantsRouter.get("/", async (c) => {
     try {
-        const participants = await getAllParticipantsService();
-        return c.json({ participants }, 200);
+        const participantList = await getAllParticipantsService();
+        return c.json({ participantList }, 200);
     } catch (error) {
+        console.error(
+            "##### Error while getting participants #####\n\n",
+            error,
+        );
         c.json({ error: "Error while getting participants." }, 500);
     }
 });
