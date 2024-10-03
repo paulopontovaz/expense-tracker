@@ -15,28 +15,28 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
-import type { Participant } from "../../../../../server/db/models/schema";
-import { useAddParticipant, useEditParticipant } from "../../../services";
+import type { Participant } from "../../../../server/db/models/schema";
+import { useAddParticipant, useEditParticipant } from "../../services";
 
 const schema = yup.object({
     name: yup.string().required("Name is required"),
     income: yup.number().required("Income is required"),
 });
-type AddParticipantFormData = yup.InferType<typeof schema>;
+type ParticipantFormData = yup.InferType<typeof schema>;
 
-type AddParticipantsModalProps = {
+type ParticipantModalProps = {
     isOpen: boolean;
     onClose: () => void;
     participant: Participant | null;
 };
 
-export function AddParticipantsModal(props: AddParticipantsModalProps) {
+export function ParticipantModal(props: ParticipantModalProps) {
     const { isOpen, onClose, participant } = props;
     const {
         register,
         handleSubmit: handleFormSubmit,
         reset,
-    } = useForm<AddParticipantFormData>({
+    } = useForm<ParticipantFormData>({
         resolver: yupResolver(schema),
         values: participant
             ? {
@@ -53,9 +53,7 @@ export function AddParticipantsModal(props: AddParticipantsModalProps) {
         onClose();
     };
 
-    const handleSubmit: SubmitHandler<AddParticipantFormData> = async (
-        data,
-    ) => {
+    const handleSubmit: SubmitHandler<ParticipantFormData> = async (data) => {
         if (participant) {
             await editParticipant({ ...data, id: participant.id });
         } else {

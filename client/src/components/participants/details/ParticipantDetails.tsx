@@ -1,12 +1,21 @@
-import { DeleteIcon } from "@chakra-ui/icons";
-import { HStack, Heading, IconButton, Text, VStack } from "@chakra-ui/react";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import {
+    HStack,
+    Heading,
+    IconButton,
+    Text,
+    VStack,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useDeleteParticipant, useGetParticipant } from "../../../services";
+import { ParticipantModal } from "../ParticipantModal";
 
 export function ParticipantDetails() {
     const { participantId } = useParams();
     const { participant } = useGetParticipant({ participantId });
     const { deleteParticipant } = useDeleteParticipant();
+    const { isOpen, onClose, onOpen } = useDisclosure();
 
     return participant ? (
         <VStack w="full" spacing={4}>
@@ -21,17 +30,21 @@ export function ParticipantDetails() {
                         aria-label={`Delete participant '${participant.name}'`}
                         onClick={() => deleteParticipant(participant.id)}
                     />
-                    {/* TODO: Finish edit functionality */}
-                    {/* <IconButton
+                    <IconButton
                         icon={<EditIcon />}
                         aria-label={`Edit participant '${participant.name}'`}
-                        onClick={() => onOpen(participant)}
-                    /> */}
+                        onClick={onOpen}
+                    />
                 </HStack>
             </HStack>
             <VStack w="full" alignItems="flex-start">
                 <Heading>Recurrent Expenses</Heading>
             </VStack>
+            <ParticipantModal
+                isOpen={isOpen}
+                participant={participant}
+                onClose={onClose}
+            />
         </VStack>
     ) : null;
 }
