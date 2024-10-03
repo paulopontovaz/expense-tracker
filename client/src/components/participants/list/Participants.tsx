@@ -1,7 +1,7 @@
 import { Button, HStack, Text, VStack, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import type { Participant } from "../../../../../server/db/models/schema";
-import { AddParticipantsModal } from "./AddParticipantsModal";
+import { ParticipantModal } from "../ParticipantModal";
 import { ParticipantList } from "./ParticipantList";
 
 export function Participants() {
@@ -32,7 +32,7 @@ export function Participants() {
             </HStack>
             <ParticipantList onOpen={handleOnOpen} />
             {isOpen && (
-                <AddParticipantsModal
+                <ParticipantModal
                     isOpen={isOpen}
                     onClose={handleOnClose}
                     participant={currentParticipant}
