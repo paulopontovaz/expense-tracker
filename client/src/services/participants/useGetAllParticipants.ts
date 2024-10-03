@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Participant } from "../../../../server/db/models/schema";
+import type { GetAllParticipantsServiceReturnType } from "../../../../server/api/services";
 import { api } from "../_common";
 
-type FetchAllParticipantsResponse = {
-    participants: Participant[];
+export type FetchAllParticipantsResponse = {
+    participantList: GetAllParticipantsServiceReturnType;
 };
 
 export const fetchAllParticipantsRequest = async () => {
@@ -11,7 +11,7 @@ export const fetchAllParticipantsRequest = async () => {
         .get("participants")
         .json()) as FetchAllParticipantsResponse;
 
-    return response.participants ?? [];
+    return response.participantList ?? [];
 };
 
 export const getAllParticipantsQueryKey = () => ["participants"];
@@ -23,5 +23,5 @@ export const useGetAllParticipants = () => {
         retry: 0,
     });
 
-    return { participants: data ?? [] };
+    return { participantList: data ?? [] };
 };

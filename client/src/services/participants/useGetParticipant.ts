@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Participant } from "../../../../server/db/models/schema";
+import type {
+    Participant,
+    RecurrentExpense,
+} from "../../../../server/db/models/schema";
 import { api } from "../_common";
 
 type FetchParticipantResponse = {
-    participant: Participant;
+    participant: Participant & { recurrentExpenses: RecurrentExpense[] };
 };
 
 export const fetchParticipantRequest = async (participantId?: string) => {
@@ -30,8 +33,11 @@ export const useGetParticipant = (options: UseGetParticipantOptions) => {
 
     const { data } = useQuery({
         queryKey: getParticipantQueryKey(participantId),
-        queryFn: () => fetchParticipantRequest(participantId),
-        retry: 0,
+        queryFn: () =>
+            participantId
+                ? fetchParticipantRequest(participantId)
+                : Promise.resolve(null),
+        retry: 3,
     });
 
     return { participant: data ?? null };

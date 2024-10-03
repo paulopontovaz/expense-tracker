@@ -6,7 +6,7 @@ export const deleteRecurrentExpenseRequest = async (
     recurrentExpenseId: number,
 ): Promise<number> =>
     (await api
-        .delete(`/recurrent-expenses/${recurrentExpenseId}`)
+        .delete(`recurrent-expenses/${recurrentExpenseId}`)
         .json()) as number;
 
 export const useDeleteRecurrentExpense = () => {

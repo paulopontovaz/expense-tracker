@@ -8,7 +8,7 @@ type FetchRecurrentExpensesResponse = {
 
 export const fetchAllRecurrentExpensesRequest = async () => {
     const response = (await api
-        .get("/recurrent-expenses")
+        .get("recurrent-expenses")
         .json()) as FetchRecurrentExpensesResponse;
 
     return response.recurrentExpenses ?? [];
