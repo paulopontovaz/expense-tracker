@@ -1,7 +1,6 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
     HStack,
-    Heading,
     IconButton,
     Text,
     VStack,
@@ -10,6 +9,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useDeleteParticipant, useGetParticipant } from "../../../services";
 import { ParticipantModal } from "../ParticipantModal";
+import { RecurrentExpenseList } from "./recurrent-expenses/RecurrentExpenseList";
 
 export function ParticipantDetails() {
     const { participantId } = useParams();
@@ -17,12 +17,21 @@ export function ParticipantDetails() {
     const { deleteParticipant } = useDeleteParticipant();
     const { isOpen, onClose, onOpen } = useDisclosure();
 
+    const montlyPayment =
+        participant?.recurrentExpenses.reduce((acc, recurrentExpense) => {
+            return acc + recurrentExpense.price / recurrentExpense.frequency;
+        }, 0) ?? 0;
+
     return participant ? (
-        <VStack w="full" spacing={4}>
+        <VStack w="full" spacing={12}>
             <HStack w="full" justifyContent="space-between" spacing={3}>
                 <VStack alignItems="flex-start">
-                    <Text fontWeight="bold">{participant.name}</Text>
-                    <Text pl={4}> Income (EUR): {participant.income}</Text>
+                    <Text fontWeight="bold" fontSize="xx-large">
+                        {participant.name}
+                    </Text>
+                    <Text pl={4} fontSize="x-large">
+                        {`Income (EUR): ${participant.income.toFixed(2)}`}
+                    </Text>
                 </VStack>
                 <HStack>
                     <IconButton
@@ -38,7 +47,14 @@ export function ParticipantDetails() {
                 </HStack>
             </HStack>
             <VStack w="full" alignItems="flex-start">
-                <Heading>Recurrent Expenses</Heading>
+                <HStack w="full" justifyContent="space-between">
+                    <Text fontSize="large">Recurrent Expenses</Text>
+                    <Text fontSize="large">{`Monthly Total (EUR): ${montlyPayment.toFixed(2)}`}</Text>
+                </HStack>
+                <RecurrentExpenseList
+                    participantId={participant.id}
+                    recurrentExpenses={participant.recurrentExpenses}
+                />
             </VStack>
             <ParticipantModal
                 isOpen={isOpen}
