@@ -85,6 +85,7 @@ export function ParticipantModal(props: ParticipantModalProps) {
                             <FormLabel>Income</FormLabel>
                             <Input
                                 type="number"
+                                step="0.01"
                                 {...register("income", { valueAsNumber: true })}
                             />
                         </FormControl>
