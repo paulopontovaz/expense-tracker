@@ -13,8 +13,8 @@ export function NavMenu() {
             <Button as={NavLink} to="/participants" variant="ghost">
                 Participants
             </Button>
-            <Button as={NavLink} to="/expense-summaries" variant="ghost">
-                Expense Summaries
+            <Button as={NavLink} to="/expense-summary" variant="ghost">
+                Expense Summary
             </Button>
         </HStack>
     );
