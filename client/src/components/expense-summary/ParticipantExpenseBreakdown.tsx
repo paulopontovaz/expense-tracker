@@ -1,5 +1,6 @@
 import { HStack, Text, VStack } from "@chakra-ui/react";
 import type { FetchParticipantResponse } from "../../services/participants/useGetParticipant";
+import { LabelledContent } from "../common/LabelledContent";
 import { getParticipantTotal } from "./expenseSummaryUtils";
 
 type ParticipantExpenseBreakdownProps = {
@@ -24,7 +25,9 @@ export function ParticipantExpenseBreakdown(
                 <Text fontSize="x-large" fontWeight="semibold">
                     {participant.name}
                 </Text>
-                <Text fontSize="larger">{`Monthly Income: ${participant.income.toFixed(2)} EUR`}</Text>
+                <LabelledContent label="Monthly Income">
+                    <Text fontSize="larger">{`${participant.income.toFixed(2)} EUR`}</Text>
+                </LabelledContent>
             </HStack>
             <VStack w="full" spacing={4} p={3}>
                 <HStack
