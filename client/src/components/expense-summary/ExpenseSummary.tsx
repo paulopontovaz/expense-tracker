@@ -1,5 +1,6 @@
-import { Text, VStack } from "@chakra-ui/react";
+import { Flex, Text, VStack } from "@chakra-ui/react";
 import { useGetAllParticipants } from "../../services";
+import { LabelledContent } from "../common/LabelledContent";
 import { ParticipantAdjustments } from "./ParticipantAdjustments";
 import { ParticipantExpenseBreakdown } from "./ParticipantExpenseBreakdown";
 import { getSpendablePerParticipant } from "./expenseSummaryUtils";
@@ -14,15 +15,20 @@ export function ExpenseSummary() {
                 <Text fontSize="x-large" fontWeight="bold">
                     Expense Summary
                 </Text>
-                <VStack w="full">
-                    <Text fontSize="large">Spendable per participant</Text>
-                    <Text
-                        fontSize="xxx-large"
-                        fontWeight="bold"
-                    >{`${spendablePerParticipant.toFixed(2)} EUR`}</Text>
-                    <ParticipantAdjustments participantList={participantList} />
-                </VStack>
+                <Flex w="full" justifyContent="center">
+                    <LabelledContent
+                        label="Spendable per participant"
+                        alignItems="center"
+                    >
+                        <Text
+                            fontSize="xxx-large"
+                            fontWeight="bold"
+                        >{`${spendablePerParticipant.toFixed(2)} EUR`}</Text>
+                    </LabelledContent>
+                </Flex>
             </VStack>
+
+            <ParticipantAdjustments participantList={participantList} />
 
             {participantList.map((participant) => (
                 <ParticipantExpenseBreakdown
