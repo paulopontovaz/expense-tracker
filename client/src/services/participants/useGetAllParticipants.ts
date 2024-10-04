@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import type { GetAllParticipantsServiceReturnType } from "../../../../server/api/services";
+import type { GetAllParticipantsServiceResponse } from "../../../../server/api/services";
 import { api } from "../_common";
 
 export type FetchAllParticipantsResponse = {
-    participantList: GetAllParticipantsServiceReturnType;
+    participantList: GetAllParticipantsServiceResponse;
 };
 
 export const fetchAllParticipantsRequest = async () => {

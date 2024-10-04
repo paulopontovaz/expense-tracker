@@ -5,7 +5,7 @@ import type {
 } from "../../../../server/db/models/schema";
 import { api } from "../_common";
 
-type FetchParticipantResponse = {
+export type FetchParticipantResponse = {
     participant: Participant & { recurrentExpenses: RecurrentExpense[] };
 };
 
