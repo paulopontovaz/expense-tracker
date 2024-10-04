@@ -35,7 +35,7 @@ export const recurrentExpenses = pgTable("recurrent_expenses", {
     frequency: integer("frequency").notNull().default(1),
     participantId: uuid("participant_id")
         .notNull()
-        .references(() => participants.id),
+        .references(() => participants.id, { onDelete: "cascade" }),
 });
 
 export type RecurrentExpense = typeof recurrentExpenses.$inferSelect;

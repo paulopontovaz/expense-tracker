@@ -22,6 +22,13 @@
       "when": 1724794094541,
       "tag": "0002_friendly_shadowcat",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1727998819416,
+      "tag": "0003_closed_silverclaw",
+      "breakpoints": true
     }
   ]
 }
