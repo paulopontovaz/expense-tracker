@@ -65,6 +65,10 @@ participantsRouter.delete("/:id", async (c) => {
         await deleteParticipantService(deletedParticipantId);
         return c.json({ deletedParticipantId }, 200);
     } catch (error) {
+        console.error(
+            "##### Error while deleting participants #####\n\n",
+            error,
+        );
         c.json({ error: "Error while deleting participant." }, 500);
     }
 });

@@ -6,7 +6,7 @@ import type {
     ParticipantUpdate,
 } from "../../db/models/schema";
 
-export type GetAllParticipantsServiceReturnType = Awaited<
+export type GetAllParticipantsServiceResponse = Awaited<
     ReturnType<typeof getAllParticipantsService>
 >;
 
@@ -33,6 +33,10 @@ export const getAllParticipantsService = async () => {
         throw new Error(`An unknown error occurred: ${error}`);
     }
 };
+
+export type GetParticipantServiceResponse = Awaited<
+    ReturnType<typeof getParticipantService>
+>;
 
 export const getParticipantService = async (id: string) => {
     try {
@@ -74,8 +78,17 @@ export const updateParticipantService = async (
             income: participants.income,
         });
 
-export const deleteParticipantService = async (id: string) =>
-    await db
-        .delete(participants)
-        .where(eq(participants.id, id))
-        .returning({ id: participants.id });
+export const deleteParticipantService = async (id: string) => {
+    try {
+        return await db
+            .delete(participants)
+            .where(eq(participants.id, id))
+            .returning({ id: participants.id });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw error;
+        }
+
+        throw new Error(`An unknown error occurred: ${error}`);
+    }
+};
