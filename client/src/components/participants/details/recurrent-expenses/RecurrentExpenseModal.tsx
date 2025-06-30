@@ -70,12 +70,6 @@ export function RecurrentExpenseModal(props: RecurrentExpenseModalProps) {
     const handleSubmit: SubmitHandler<RecurrentExpenseFormData> = async (
         data,
     ) => {
-        console.log("##### RecurrentExpenseModal data:", data);
-        console.log(
-            "##### RecurrentExpenseModal participantId:",
-            participantId,
-        );
-
         if (!participantId) {
             console.error("Participant ID not found");
             toast({
