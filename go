@@ -40,7 +40,7 @@ run_docker() {
 run_local() {
     docker compose stop
     docker compose rm -f
-    docker compose up postgres redis -d
+    docker compose up postgres -d
 }
 
 # Get the function name from the command-line argument
